@@ -1,5 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views import generic
@@ -77,8 +78,6 @@ class DishListView(LoginRequiredMixin, generic.ListView):
     model = Dish
     paginate_by = 5
     queryset = Dish.objects.all().select_related("dish_type")
-    context_object_name = "dish_list"
-    template_name = "kitchen/dish_list.html"
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(DishListView, self).get_context_data(**kwargs)
@@ -169,3 +168,15 @@ class CookDeleteView(LoginRequiredMixin, generic.DeleteView):
     model = Cook
     success_url = reverse_lazy("kitchen:cooks-list")
     template_name = "kitchen/cook_confirm_delete.html"
+
+
+@login_required
+def toggle_assign_to_dish(request, pk):
+    cook = Cook.objects.get(id=request.user.id)
+    if (
+        Dish.objects.get(id=pk) in cook.dishes.all()
+    ):  # probably could check if car exists
+        cook.dishes.remove(pk)
+    else:
+        cook.dishes.add(pk)
+    return HttpResponseRedirect(reverse_lazy("kitchen:dish-detail", args=[pk]))

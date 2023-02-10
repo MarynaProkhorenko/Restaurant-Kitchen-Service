@@ -34,6 +34,10 @@ class Dish(models.Model):
     dish_type = models.ForeignKey(DishType, on_delete=models.CASCADE)
     cooks = models.ManyToManyField(Cook, related_name="dishes")
 
+    class Meta:
+        verbose_name = "dish"
+        verbose_name_plural = "dishes"
+
     def __str__(self):
         return f"{self.name}( {self.dish_type}) costs {self.price}"
 
