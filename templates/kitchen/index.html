@@ -1,10 +1,17 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Title</title>
-</head>
-<body>
+{% extends "base.html" %}
 
-</body>
-</html>
+{% block content %}
+    <h1>Restaurant and Kitchen Service</h1>
+    <p>Welcome to the best Restaurant and Kitchen Service Ever!</p>
+    <h2>Restaurant and Kitchen Service has the following record counts:</h2>
+    <ul>
+        <li><strong>Cooks:</strong> {{ num_cooks }}</li>
+        <li><strong>Dishes:</strong> {{ num_dishes }}</li>
+        <li><strong>Dish types:</strong> {{ num_dish_types }}</li>
+    </ul>
+
+    <p>You have visited this page
+        {{ num_visits }} time{{ num_visits|pluralize }}.
+    </p>
+
+{% endblock %}
