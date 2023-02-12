@@ -5,11 +5,10 @@ from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views import generic
 
-from kitchen.forms import DishForm, CookCreationForm, DishSearchForm, DishTypeSearchForm, CookSearchForm
+from kitchen.forms import DishForm, DishSearchForm, DishTypeSearchForm, CookSearchForm, CookUpdateForm
 from kitchen.models import Dish, DishType, Cook
 
 
-@login_required
 def index(request):
     num_dishes = Dish.objects.count()
     num_dish_types = DishType.objects.count()
@@ -154,19 +153,19 @@ class CookDetailView(LoginRequiredMixin, generic.DetailView):
 
 class CookCreateView(LoginRequiredMixin, generic.CreateView):
     model = Cook
-    fields = "__all__"
-    success_url = reverse_lazy("kitchen:cooks-list")
+    form_class = CookUpdateForm
+    success_url = reverse_lazy("kitchen:cook-list")
 
 
 class CookUpdateView(LoginRequiredMixin, generic.UpdateView):
     model = Cook
-    fields = "__all__"
-    success_url = reverse_lazy("kitchen:cooks-list")
+    form_class = CookUpdateForm
+    success_url = reverse_lazy("kitchen:cook-list")
 
 
 class CookDeleteView(LoginRequiredMixin, generic.DeleteView):
     model = Cook
-    success_url = reverse_lazy("kitchen:cooks-list")
+    success_url = reverse_lazy("kitchen:cook-list")
     template_name = "kitchen/cook_confirm_delete.html"
 
 

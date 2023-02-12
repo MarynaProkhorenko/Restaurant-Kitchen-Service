@@ -1,7 +1,7 @@
 from django.urls import path
-from views import index, DishTypeListView, DishTypeCreateView, DishTypeUpdateView, DishTypeDeleteView, DishListView, \
+from .views import index, DishTypeListView, DishTypeCreateView, DishTypeUpdateView, DishTypeDeleteView, DishListView, \
     DishCreateView, DishUpdateView, DishDeleteView, DishDetailView, CookDetailView, CookListView, CookCreateView, \
-    CookUpdateView, CookDeleteView
+    CookUpdateView, CookDeleteView, toggle_assign_to_dish
 
 urlpatterns = [
     path("", index, name="index"),

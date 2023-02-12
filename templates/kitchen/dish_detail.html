@@ -30,9 +30,9 @@
   <hr>
   <ul>
     {% for cook in dish.cooks.all %}
-      <li>{{ cook.username }} ({{ cook.first_name }} {{ cook.last_name }})</li>
+      <li><strong>{{ cook.username }}</strong> ({{ cook.first_name }} {{ cook.last_name }})</li>
     {% endfor %}
   </ul>
-  <br>
+  <hr>
   <p>{{ dish.description }}</p>
 {% endblock %}
