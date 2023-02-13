@@ -13,7 +13,7 @@
   </h1>
   <p>Dish Type: {{ dish.dish_type.name }} </p>
   <p>Price: {{ dish.price }} </p>
-  <h1>
+  <h3>
     Cooks
 
     {% if cook in user.cooks.all %}
@@ -26,7 +26,7 @@
       </a>
     {% endif %}
 
-  </h1>
+  </h3>
   <hr>
   <ul>
     {% for cook in dish.cooks.all %}

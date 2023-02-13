@@ -133,7 +133,7 @@ class CookListView(LoginRequiredMixin, generic.ListView):
 
         username = self.request.GET.get(("username", ""))
 
-        context["search_form"] = DishSearchForm(initial={
+        context["search_form"] = CookSearchForm(initial={
             "username": username})
 
         return context
