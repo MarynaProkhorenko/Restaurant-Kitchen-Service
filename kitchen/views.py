@@ -6,13 +6,14 @@ from django.urls import reverse_lazy
 from django.views import generic
 
 from kitchen.forms import DishForm, DishSearchForm, DishTypeSearchForm, CookSearchForm, CookUpdateForm
-from kitchen.models import Dish, DishType, Cook
+from kitchen.models import Dish, DishType, Cook, Ingredient
 
 
 def index(request):
     num_dishes = Dish.objects.count()
     num_dish_types = DishType.objects.count()
     num_cooks = Cook.objects.count()
+    num_ingredients = Ingredient.objects.count()
 
     num_visits = request.session.get("num_visits", 0)
     request.session["num_visits"] = num_visits + 1
@@ -21,6 +22,7 @@ def index(request):
         "num_dishes": num_dishes,
         "num_dish_types": num_dish_types,
         "num_cooks": num_cooks,
+        "num_ingredients": num_ingredients,
         "num_visits": num_visits + 1,
     }
 
@@ -179,3 +181,27 @@ def toggle_assign_to_dish(request, pk):
     else:
         cook.dishes.add(pk)
     return HttpResponseRedirect(reverse_lazy("kitchen:dish-detail", args=[pk]))
+
+
+class IngredientListView(LoginRequiredMixin, generic.ListView):
+    model = Ingredient
+    template_name = "kitchen/ingredient_list.html"
+    paginate_by = 5
+
+
+class IngredientCreateView(LoginRequiredMixin, generic.CreateView):
+    model = Ingredient
+    fields = "__all__"
+    success_url = reverse_lazy("kitchen:ingredient-list")
+
+
+class IngredientUpdateView(LoginRequiredMixin, generic.UpdateView):
+    model = Ingredient
+    fields = "__all__"
+    success_url = reverse_lazy("kitchen:ingredient-list")
+
+
+class IngredientDeleteView(LoginRequiredMixin, generic.DeleteView):
+    model = Ingredient
+    success_url = reverse_lazy("kitchen:ingredient-list")
+    template_name = "kitchen/ingredient_confirm_delete.html"

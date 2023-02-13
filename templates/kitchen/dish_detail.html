@@ -35,4 +35,9 @@
   </ul>
   <hr>
   <p>{{ dish.description }}</p>
+  <hr>
+  <p>Ingredients:</p>
+  {% for ingredient in dish.ingredients.all %}
+      <li>{{ ingredient.name }} ({{ ingredient.country }})</li>
+    {% endfor %}
 {% endblock %}

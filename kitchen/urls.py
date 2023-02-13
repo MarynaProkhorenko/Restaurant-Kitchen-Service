@@ -1,7 +1,8 @@
 from django.urls import path
 from .views import index, DishTypeListView, DishTypeCreateView, DishTypeUpdateView, DishTypeDeleteView, DishListView, \
     DishCreateView, DishUpdateView, DishDeleteView, DishDetailView, CookDetailView, CookListView, CookCreateView, \
-    CookUpdateView, CookDeleteView, toggle_assign_to_dish
+    CookUpdateView, CookDeleteView, toggle_assign_to_dish, IngredientListView, IngredientCreateView, \
+    IngredientUpdateView, IngredientDeleteView
 
 urlpatterns = [
     path("", index, name="index"),
@@ -79,6 +80,26 @@ urlpatterns = [
         "dishes/<int:pk>/toggle-assign/",
         toggle_assign_to_dish,
         name="toggle-dish-assign",
+    ),
+    path(
+        "ingredients/",
+        IngredientListView.as_view(),
+        name="ingredient-list",
+    ),
+    path(
+        "ingredients/create/",
+        IngredientCreateView.as_view(),
+        name="ingredient-create",
+    ),
+    path(
+        "ingredients/<int:pk>/update/",
+        IngredientUpdateView.as_view(),
+        name="ingredient-update",
+    ),
+    path(
+        "ingredients/<int:pk>/delete/",
+        IngredientDeleteView.as_view(),
+        name="ingredient-delete",
     ),
 ]
 
