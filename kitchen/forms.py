@@ -21,11 +21,11 @@ class DishForm(forms.ModelForm):
 
 
 class DishSearchForm(forms.Form):
-    name = forms.CharField(
+    ingredient = forms.CharField(
         max_length=255,
         required=False,
         label="",
-        widget=forms.TextInput(attrs={"placeholder": "Search by name..."}))
+        widget=forms.TextInput(attrs={"placeholder": "Search by ingredient..."}))
 
 
 class CookSearchForm(forms.Form):
