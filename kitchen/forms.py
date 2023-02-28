@@ -1,5 +1,6 @@
 from django import forms
 from django.contrib.auth import get_user_model
+from django.contrib.auth.forms import UserCreationForm
 from django.core.exceptions import ValidationError
 
 from kitchen.models import Dish, Cook, Ingredient
@@ -25,7 +26,10 @@ class DishSearchForm(forms.Form):
         max_length=255,
         required=False,
         label="",
-        widget=forms.TextInput(attrs={"placeholder": "Search by ingredient..."}))
+        widget=forms.TextInput(
+            attrs={"placeholder": "Search by ingredient..."}
+        )
+    )
 
 
 class CookSearchForm(forms.Form):
@@ -33,7 +37,10 @@ class CookSearchForm(forms.Form):
         max_length=255,
         required=False,
         label="",
-        widget=forms.TextInput(attrs={"placeholder": "Search by username..."}))
+        widget=forms.TextInput(
+            attrs={"placeholder": "Search by username..."}
+        )
+    )
 
 
 class DishTypeSearchForm(forms.Form):
@@ -41,22 +48,33 @@ class DishTypeSearchForm(forms.Form):
         max_length=255,
         required=False,
         label="",
-        widget=forms.TextInput(attrs={"placeholder": "Search by name..."}))
+        widget=forms.TextInput(
+            attrs={"placeholder": "Search by name..."}
+        )
+    )
 
 
-class CookUpdateForm(forms.ModelForm):
-    class Meta:
+class CookCreateForm(UserCreationForm):
+    class Meta(UserCreationForm.Meta):
         model = Cook
-        fields = "__all__"
+        fields = UserCreationForm.Meta.fields + (
+            "years_of_experience",
+            "first_name",
+            "last_name"
+        )
 
     def clean_years_of_experience(self):
-        return validate_years_of_experience(self.cleaned_data["years_of_experience"])
+        return validate_years_of_experience(
+            self.cleaned_data["years_of_experience"]
+        )
 
 
 def validate_years_of_experience(
     years_of_experience,
 ):  # regex validation is also possible here
     if years_of_experience < 2:
-        raise ValidationError("Years of experience should be greater or equal 2")
+        raise ValidationError(
+            "Years of experience should be greater or equal 2"
+        )
 
     return years_of_experience

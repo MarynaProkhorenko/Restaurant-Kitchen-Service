@@ -5,8 +5,19 @@ from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views import generic
 
-from kitchen.forms import DishForm, DishSearchForm, DishTypeSearchForm, CookSearchForm, CookUpdateForm
-from kitchen.models import Dish, DishType, Cook, Ingredient
+from kitchen.forms import (
+    DishForm,
+    DishSearchForm,
+    DishTypeSearchForm,
+    CookSearchForm,
+    CookCreateForm
+)
+from kitchen.models import (
+    Dish,
+    DishType,
+    Cook,
+    Ingredient
+)
 
 
 def index(request):
@@ -50,7 +61,9 @@ class DishTypeListView(LoginRequiredMixin, generic.ListView):
         form = DishTypeSearchForm(self.request.GET)
 
         if form.is_valid():
-            return queryset.filter(name__icontains=form.cleaned_data["name"])
+            return queryset.filter(
+                name__icontains=form.cleaned_data["name"]
+            )
 
         return queryset
 
@@ -96,7 +109,9 @@ class DishListView(LoginRequiredMixin, generic.ListView):
 
         if form.is_valid():
             if form.cleaned_data["ingredient"] != "":
-                return queryset.filter(ingredients__name__icontains=form.cleaned_data["ingredient"])
+                return queryset.filter(
+                    ingredients__name__icontains=form.cleaned_data["ingredient"]
+                )
 
         return queryset
 
@@ -144,7 +159,9 @@ class CookListView(LoginRequiredMixin, generic.ListView):
         form = CookSearchForm(self.request.GET)
 
         if form.is_valid():
-            return queryset.filter(username__icontains=form.cleaned_data["username"])
+            return queryset.filter(
+                username__icontains=form.cleaned_data["username"]
+            )
 
         return queryset
 
@@ -156,13 +173,13 @@ class CookDetailView(LoginRequiredMixin, generic.DetailView):
 
 class CookCreateView(LoginRequiredMixin, generic.CreateView):
     model = Cook
-    form_class = CookUpdateForm
+    form_class = CookCreateForm
     success_url = reverse_lazy("kitchen:cook-list")
 
 
 class CookUpdateView(LoginRequiredMixin, generic.UpdateView):
     model = Cook
-    form_class = CookUpdateForm
+    form_class = CookCreateForm
     success_url = reverse_lazy("kitchen:cook-list")
 
 
@@ -176,11 +193,13 @@ class CookDeleteView(LoginRequiredMixin, generic.DeleteView):
 def toggle_assign_to_dish(request, pk):
     dish = Dish.objects.get(pk=pk)
     cook = Cook.objects.get(pk=request.user.pk)
-    if dish in cook.dishes.all():  # probably could check if car exists
+    if dish in cook.dishes.all():
         cook.dishes.remove(dish)
     else:
         cook.dishes.add(dish)
-    return HttpResponseRedirect(reverse_lazy("kitchen:dish-detail", args=[pk]))
+    return HttpResponseRedirect(reverse_lazy(
+        "kitchen:dish-detail", args=[pk])
+    )
 
 
 class IngredientListView(LoginRequiredMixin, generic.ListView):
