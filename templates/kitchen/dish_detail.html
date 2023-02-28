@@ -1,43 +1,95 @@
-{% extends "base.html" %}
+{% extends "base_background.html" %}
+{% load static %}
+
+{% block title %} Dish details {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
 
 {% block content %}
-  <h1>
-    {{ dish.name }}
-    <a href="{% url 'kitchen:dish-delete' pk=dish.id %}" class="btn btn-danger link-to-page">
-      Delete
-    </a>
 
-    <a href="{% url 'kitchen:dish-update' pk=dish.id %}" class="btn btn-secondary link-to-page">
-      Update
-    </a>
-  </h1>
-  <p>Dish Type: {{ dish.dish_type.name }} </p>
-  <p>Price: {{ dish.price }} </p>
-  <h3>
-    Cooks
+  <header>
+    <div class="page-header min-height-400" style="background-image: url('{% static 'img/ompk2v2bj7od7qjy58gzofhyd8wzz55d.jpg' %}')"
+         loading="lazy">
+      <span class="mask bg-gradient-dark opacity-8"></span>
+    </div>
+  </header>
 
-    {% if cook in user.cooks.all %}
-      <a href="{% url 'kitchen:toggle-dish-assign' pk=dish.id %}" class="btn btn-danger link-to-page">
-        Delete me from this dish
-      </a>
-    {% else %}
-      <a href="{% url 'kitchen:toggle-dish-assign' pk=dish.id %}" class="btn btn-success link-to-page">
-        Assign me to this dish
-      </a>
-    {% endif %}
+  <div class="card card-body blur shadow-blur mx-3 mx-md-4 mt-n10 mb-4">
+    <!-- START Testimonials w/ user image & text & info -->
+    <section class="py-sm-1 py-5 position-relative">
+      <div class="container">
+        <div class="row">
+          <div class="col-12 mx-auto">
+            <div class="row py-5">
+              <div class="col-lg-7 col-md-7 z-index-2 position-relative px-md-2 px-sm-5 mx-auto">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                  <h2 class="mb-0">Dish : {{ dish.name }}</h2>
+                  <a href="{% url 'kitchen:dish-update' pk=dish.pk %}"
+                     class="btn btn-sm btn-outline-info text-nowrap mb-0">
+                    Update
+                  </a>
+                </div>
+                <div class="row mb-3">
+                  <div class="col-auto">
+                    <span class="h6">Dish type: {{ dish.dish_type.name }}</span>
+                  </div>
+                  <div class="col-auto">
+                    <span
+                        class="h6">Price: {{ dish.price }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <h2>Description :</h2>
+      </div>
+      <div class="row">
+        <h6>{{ dish.description }}</h6>
+      </div>
+      <br>
+      <div class="row">
+        <h2>Assigned to :</h2>
+          <ul>
+          {% for cook in dish.cooks.all %}
+            <li><strong>{{ cook.username }}</strong> ({{ cook.first_name }} {{ cook.last_name }})</li>
+          {% endfor %}
+          </ul>
+          {% if user in dish.cooks.all %}
+            <div>
+            <a href="{% url 'kitchen:toggle-dish-assign' pk=dish.id %}" class="btn btn-danger link-to-page">
+            Delete me from this dish
+            </a>
+            </div>
+          {% else %}
+            <div>
+            <a href="{% url 'kitchen:toggle-dish-assign' pk=dish.id %}" class="btn btn-success link-to-page">
+            Assign me to this dish
+            </a>
+            </div>
+          {% endif %}
+      <br>
+       <div class="row">
+        <h2>Ingredients:</h2>
+          <ul>
+          {% for ingredient in dish.ingredients.all %}
+            <li>{{ ingredient.name }} ({{ ingredient.country }})</li>
+          {% endfor %}
+          </ul>
 
-  </h3>
-  <hr>
-  <ul>
-    {% for cook in dish.cooks.all %}
-      <li><strong>{{ cook.username }}</strong> ({{ cook.first_name }} {{ cook.last_name }})</li>
-    {% endfor %}
-  </ul>
-  <hr>
-  <p>{{ dish.description }}</p>
-  <hr>
-  <p>Ingredients:</p>
-  {% for ingredient in dish.ingredients.all %}
-      <li>{{ ingredient.name }} ({{ ingredient.country }})</li>
-    {% endfor %}
-{% endblock %}
+      </div>
+    </section>
+    <!-- END Testimonials w/ user image & text & info -->
+    <!-- START Blogs w/ 4 cards w/ image & text & link -->
+    <!-- END Blogs w/ 4 cards w/ image & text & link -->
+  </div>
+
+
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}{% endblock javascripts %}

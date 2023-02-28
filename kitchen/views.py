@@ -78,7 +78,7 @@ class DishTypeDeleteView(LoginRequiredMixin, generic.DeleteView):
 class DishListView(LoginRequiredMixin, generic.ListView):
     model = Dish
     paginate_by = 5
-    queryset = Dish.objects.all().select_related("dish_type")
+    queryset = Dish.objects.all().prefetch_related("ingredients")
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(DishListView, self).get_context_data(**kwargs)
@@ -95,7 +95,8 @@ class DishListView(LoginRequiredMixin, generic.ListView):
         form = DishSearchForm(self.request.GET)
 
         if form.is_valid():
-            return queryset.filter(ingredients__name__icontains=form.cleaned_data["ingredient"])
+            if form.cleaned_data["ingredient"] != "":
+                return queryset.filter(ingredients__name__icontains=form.cleaned_data["ingredient"])
 
         return queryset
 
@@ -173,13 +174,12 @@ class CookDeleteView(LoginRequiredMixin, generic.DeleteView):
 
 @login_required
 def toggle_assign_to_dish(request, pk):
-    cook = Cook.objects.get(id=request.user.id)
-    if (
-        Dish.objects.get(id=pk) in cook.dishes.all()
-    ):  # probably could check if car exists
-        cook.dishes.remove(pk)
+    dish = Dish.objects.get(pk=pk)
+    cook = Cook.objects.get(pk=request.user.pk)
+    if dish in cook.dishes.all():  # probably could check if car exists
+        cook.dishes.remove(dish)
     else:
-        cook.dishes.add(pk)
+        cook.dishes.add(dish)
     return HttpResponseRedirect(reverse_lazy("kitchen:dish-detail", args=[pk]))
 
 
