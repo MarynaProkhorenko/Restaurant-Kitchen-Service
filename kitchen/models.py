@@ -9,7 +9,7 @@ class DishType(models.Model):
     class Meta:
         ordering = ["name"]
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.name
 
 
@@ -20,10 +20,10 @@ class Cook(AbstractUser):
         verbose_name = "cook"
         verbose_name_plural = "cooks"
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.username} ({self.first_name} {self.last_name})"
 
-    def get_absolute_url(self):
+    def get_absolute_url(self) -> str:
         return reverse("kitchen:cook-detail", kwargs={"pk": self.pk})
 
 
@@ -31,7 +31,7 @@ class Ingredient(models.Model):
     name = models.CharField(max_length=255)
     country = models.CharField(max_length=255)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.name}(made in {self.country})"
 
 
@@ -47,8 +47,8 @@ class Dish(models.Model):
         verbose_name = "dish"
         verbose_name_plural = "dishes"
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.name}( {self.dish_type}) costs {self.price}"
 
-    def get_absolute_url(self):
+    def get_absolute_url(self) -> str:
         return reverse("kitchen:dish-detail", kwargs={"pk": self.pk})

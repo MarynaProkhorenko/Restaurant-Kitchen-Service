@@ -1,3 +1,5 @@
+from typing import Callable
+
 from django import forms
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm
@@ -63,7 +65,7 @@ class CookCreateForm(UserCreationForm):
             "last_name"
         )
 
-    def clean_years_of_experience(self):
+    def clean_years_of_experience(self) -> Callable:
         return validate_years_of_experience(
             self.cleaned_data["years_of_experience"]
         )
@@ -71,7 +73,7 @@ class CookCreateForm(UserCreationForm):
 
 def validate_years_of_experience(
     years_of_experience,
-):  # regex validation is also possible here
+) -> int:  # regex validation is also possible here
     if years_of_experience < 2:
         raise ValidationError(
             "Years of experience should be greater or equal 2"

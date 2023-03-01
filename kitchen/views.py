@@ -1,6 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import HttpResponseRedirect
+from django.db.models import QuerySet
+from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views import generic
@@ -20,7 +21,7 @@ from kitchen.models import (
 )
 
 
-def index(request):
+def index(request) -> HttpResponse:
     num_dishes = Dish.objects.count()
     num_dish_types = DishType.objects.count()
     num_cooks = Cook.objects.count()
@@ -46,7 +47,7 @@ class DishTypeListView(LoginRequiredMixin, generic.ListView):
     template_name = "kitchen/dish_type_list.html"
     paginate_by = 5
 
-    def get_context_data(self, *, object_list=None, **kwargs):
+    def get_context_data(self, *, object_list=None, **kwargs) -> dict:
         context = super(DishTypeListView, self).get_context_data(**kwargs)
 
         name = self.request.GET.get(("name", ""))
@@ -56,7 +57,7 @@ class DishTypeListView(LoginRequiredMixin, generic.ListView):
 
         return context
 
-    def get_queryset(self):
+    def get_queryset(self) -> QuerySet:
         queryset = DishType.objects.all()
         form = DishTypeSearchForm(self.request.GET)
 
@@ -93,7 +94,7 @@ class DishListView(LoginRequiredMixin, generic.ListView):
     paginate_by = 5
     queryset = Dish.objects.all().prefetch_related("ingredients")
 
-    def get_context_data(self, *, object_list=None, **kwargs):
+    def get_context_data(self, *, object_list=None, **kwargs) -> dict:
         context = super(DishListView, self).get_context_data(**kwargs)
 
         ingredient = self.request.GET.get(("ingredient", ""))
@@ -103,7 +104,7 @@ class DishListView(LoginRequiredMixin, generic.ListView):
 
         return context
 
-    def get_queryset(self):
+    def get_queryset(self) ->QuerySet:
         queryset = Dish.objects.all()
         form = DishSearchForm(self.request.GET)
 
@@ -144,7 +145,7 @@ class CookListView(LoginRequiredMixin, generic.ListView):
     model = Cook
     paginate_by = 5
 
-    def get_context_data(self, *, object_list=None, **kwargs):
+    def get_context_data(self, *, object_list=None, **kwargs) -> dict:
         context = super(CookListView, self).get_context_data(**kwargs)
 
         username = self.request.GET.get(("username", ""))
@@ -154,7 +155,7 @@ class CookListView(LoginRequiredMixin, generic.ListView):
 
         return context
 
-    def get_queryset(self):
+    def get_queryset(self) -> QuerySet:
         queryset = Cook.objects.all()
         form = CookSearchForm(self.request.GET)
 
@@ -190,7 +191,7 @@ class CookDeleteView(LoginRequiredMixin, generic.DeleteView):
 
 
 @login_required
-def toggle_assign_to_dish(request, pk):
+def toggle_assign_to_dish(request, pk) -> HttpResponseRedirect:
     dish = Dish.objects.get(pk=pk)
     cook = Cook.objects.get(pk=request.user.pk)
     if dish in cook.dishes.all():
