@@ -52,8 +52,9 @@ class DishTypeListView(LoginRequiredMixin, generic.ListView):
 
         name = self.request.GET.get(("name", ""))
 
-        context["search_form"] = DishTypeSearchForm(initial={
-            "name": name})
+        context["search_form"] = DishTypeSearchForm(
+            initial={"name": name}
+        )
 
         return context
 
@@ -99,8 +100,9 @@ class DishListView(LoginRequiredMixin, generic.ListView):
 
         ingredient = self.request.GET.get(("ingredient", ""))
 
-        context["search_form"] = DishSearchForm(initial={
-            "ingredient": ingredient})
+        context["search_form"] = DishSearchForm(
+            initial={"ingredient": ingredient}
+        )
 
         return context
 
@@ -150,8 +152,9 @@ class CookListView(LoginRequiredMixin, generic.ListView):
 
         username = self.request.GET.get(("username", ""))
 
-        context["search_form"] = CookSearchForm(initial={
-            "username": username})
+        context["search_form"] = CookSearchForm(
+            initial={"username": username}
+        )
 
         return context
 
