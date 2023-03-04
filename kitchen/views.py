@@ -1,4 +1,3 @@
-from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import QuerySet
 from django.http import HttpResponseRedirect, HttpResponse
@@ -193,17 +192,21 @@ class CookDeleteView(LoginRequiredMixin, generic.DeleteView):
     template_name = "kitchen/cook_confirm_delete.html"
 
 
-@login_required
-def toggle_assign_to_dish(request, pk) -> HttpResponseRedirect:
-    dish = Dish.objects.get(pk=pk)
-    cook = Cook.objects.get(pk=request.user.pk)
-    if dish in cook.dishes.all():
-        cook.dishes.remove(dish)
-    else:
-        cook.dishes.add(dish)
-    return HttpResponseRedirect(reverse_lazy(
-        "kitchen:dish-detail", args=[pk])
-    )
+class AssignToDishView(LoginRequiredMixin, generic.ListView):
+    model = Dish
+    fields = "__all__"
+    success_url = reverse_lazy("kitchen:dish-detail")
+
+    def get(self, request, *args, **kwargs) -> HttpResponseRedirect:
+        dish = Dish.objects.get(pk=self.kwargs["pk"])
+        cook = Cook.objects.get(pk=self.request.user.pk)
+        if dish in cook.dishes.all():
+            cook.dishes.remove(dish)
+        else:
+            cook.dishes.add(dish)
+        return HttpResponseRedirect(
+            reverse_lazy("kitchen:dish-detail", kwargs={"pk": self.kwargs["pk"]})
+        )
 
 
 class IngredientListView(LoginRequiredMixin, generic.ListView):

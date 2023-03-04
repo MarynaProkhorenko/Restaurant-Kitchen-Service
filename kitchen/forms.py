@@ -65,14 +65,14 @@ class CookCreateForm(UserCreationForm):
             "last_name"
         )
 
-    def clean_years_of_experience(self) -> Callable:
+    def clean_years_of_experience(self) -> int:
         return validate_years_of_experience(
             self.cleaned_data["years_of_experience"]
         )
 
 
 def validate_years_of_experience(
-    years_of_experience,
+    years_of_experience: int,
 ) -> int:  # regex validation is also possible here
     if years_of_experience < 2:
         raise ValidationError(
