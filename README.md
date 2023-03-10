@@ -24,7 +24,7 @@ password: passforfirstuser
 
 ## Demo
 
-![Website Interface](demo.png)
+![Website Interface](Demo.png)
 
 
 ## Installation 
