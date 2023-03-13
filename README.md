@@ -7,7 +7,7 @@ This service is represented a management system, in which Cooks can create new D
 ## Try it out
 
 Task Manager project deployed to Render -
-* https://
+* https://kitchen-service-isgn.onrender.com/
 
 Use the following user to log in and check the functionality of the website: 
 
