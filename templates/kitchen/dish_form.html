@@ -4,9 +4,18 @@
 
 {% block title %} Dish {% endblock %}
 
+
 {% block content %}
   <div class="container-fluid mt-7 ms-3">
     <h1>{{ object|yesno:"Update,Create" }} Dish</h1>
+    <h4>Before {{ object|yesno:"updating,creating" }} dish make sure that you have all ingredients to it</h4>
+    <a href="{% url 'kitchen:ingredient-list' %}" class="btn btn-secondary link-to-page">
+          View all ingredients
+          </a>
+    <h4>Also check: is there a dish type for this dish </h4>
+    <a href="{% url 'kitchen:dish-type-list' %}" class="btn btn-secondary link-to-page">
+          View dish types
+          </a>
     <form action="" method="post" novalidate>
       {% csrf_token %}
       {{ form|crispy }}
