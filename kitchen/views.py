@@ -3,7 +3,7 @@ from django.db.models import QuerySet
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render
 from django.urls import reverse_lazy
-from django.views import generic
+from django.views import generic, View
 
 from kitchen.forms import (
     DishForm,
@@ -192,13 +192,9 @@ class CookDeleteView(LoginRequiredMixin, generic.DeleteView):
     template_name = "kitchen/cook_confirm_delete.html"
 
 
-class AssignToDishView(LoginRequiredMixin, generic.ListView):
-    model = Dish
-    fields = "__all__"
-    success_url = reverse_lazy("kitchen:dish-detail")
-
-    def get(self, request, *args, **kwargs) -> HttpResponseRedirect:
-        dish = Dish.objects.get(pk=self.kwargs["pk"])
+class AssignToDishView(LoginRequiredMixin, View):
+    def post(self, request, pk):
+        dish = Dish.objects.get(pk=pk)
         cook = Cook.objects.get(pk=self.request.user.pk)
         if dish in cook.dishes.all():
             cook.dishes.remove(dish)
