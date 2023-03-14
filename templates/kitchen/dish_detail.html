@@ -59,16 +59,22 @@
           {% endfor %}
           </ul>
           {% if user in dish.cooks.all %}
+
             <div>
-            <a href="{% url 'kitchen:toggle-dish-assign' pk=dish.id %}" class="btn btn-danger link-to-page">
-            Delete me from this dish
-            </a>
+              <form action="{% url 'kitchen:toggle-dish-assign' pk=dish.id %}" method="post">
+                {% csrf_token %}
+                <input type="submit" value="Delete me from this dish" class="btn btn-danger">
+
+              </form>
             </div>
           {% else %}
             <div>
-            <a href="{% url 'kitchen:toggle-dish-assign' pk=dish.id %}" class="btn btn-success link-to-page">
-            Assign me to this dish
-            </a>
+              <form action="{% url 'kitchen:toggle-dish-assign' pk=dish.id %}" method="post">
+                {% csrf_token %}
+                <input type="submit" value="Assign me to this dish" class="btn btn-success">
+
+              </form>
+
             </div>
           {% endif %}
       <br>
